@@ -1,5 +1,7 @@
 import Utils from '../L.PM.Utils';
 
+// test
+
 const SnapMixin = {
     _initSnappableMarkers() {
         this.options.snapDistance = this.options.snapDistance || 30;
@@ -79,7 +81,7 @@ const SnapMixin = {
         // find the final latlng that we want to snap to
         let snapLatLng;
         if (!isMarker) {
-            snapLatLng = this._checkPrioritiySnapping(closestLayer);
+            snapLatLng = this._checkPrioritySnapping(closestLayer);
         } else {
             snapLatLng = closestLayer.latlng;
         }
@@ -135,7 +137,7 @@ const SnapMixin = {
 
     // we got the point we want to snap to (C), but we need to check if a coord of the polygon
     // receives priority over C as the snapping point. Let's check this here
-    _checkPrioritiySnapping(closestLayer) {
+    _checkPrioritySnapping(closestLayer) {
         const map = this._map;
 
         // A and B are the points of the closest segment to P (the marker position we want to snap)
@@ -217,6 +219,10 @@ const SnapMixin = {
 
         // finally remove everything that's leaflet.pm specific temporary stuff
         layers = layers.filter(layer => !layer._pmTempLayer);
+
+        if (this.options.snapToGrid && this.options.gridLayer) {
+          layers = layers.concat(this.options.gridLayer);
+        }
 
         // save snaplist from layers and the other snap layers added from other classes/scripts
         if (this._otherSnapLayers) {

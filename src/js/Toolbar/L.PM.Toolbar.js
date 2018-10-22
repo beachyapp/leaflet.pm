@@ -25,6 +25,8 @@ const Toolbar = L.Class.extend({
         this.isVisible = false;
         this.container = L.DomUtil.create('div', 'leaflet-pm-toolbar leaflet-bar leaflet-control');
         this._defineButtons();
+        this._addKeypressListeners();
+        this._addDrawListeners();
     },
     getButtons() {
         return this.buttons;
@@ -243,6 +245,42 @@ const Toolbar = L.Class.extend({
             }
         }
     },
+
+    _addKeypressListeners() {
+      const map = this.map;
+
+      map.on('keypress', (evt) => {
+        const draw = this.map.pm.Draw;
+
+        console.log(evt);
+
+        switch(evt.originalEvent.key) {
+          case '1':
+            draw.Marker.enable();
+            break;
+          case '2':
+            draw.Line.enable();
+            break;
+          case '3':
+            draw.Rectangle.enable();
+            break;
+          case '4':
+            draw.Poly.enable();
+            break;
+          case '5':
+            draw.Circle.enable();
+            break;
+        }
+      });
+    },
+
+    _addDrawListeners() {
+      const map = this.map;
+
+      map.on('pm:create', (evt) => {
+        map.pm.lastCreatedLayer = evt.layer;
+      });
+    }
 });
 
 export default Toolbar;
