@@ -11,6 +11,7 @@ const Map = L.Class.extend({
         });
 
         this._globalRemovalMode = false;
+        this._addDrawListeners();
     },
     addControls(options) {
         this.Toolbar.addControls(options);
@@ -124,6 +125,25 @@ const Map = L.Class.extend({
             map: this.map,
         });
     },
+
+    _addDrawListeners() {
+      const map = this.map;
+
+      map.on('pm:create', (e) => {
+        map.pm.selectedLayer = e.layer;
+
+        // Add click handler on each layer as created
+        e.layer.on('click', (evt) => {
+          map.pm.selectedLayer = evt.layer;
+
+          map.fire('pm:layerclick', {
+            shape: evt.shape,
+            layer: evt.layer,
+          });
+        });
+      });
+    },
+
     toggleGlobalEditMode(options) {
         // console.log('toggle global edit mode', options);
         if (this.globalEditEnabled()) {

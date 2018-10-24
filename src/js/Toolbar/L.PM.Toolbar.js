@@ -7,29 +7,29 @@ L.Control.PMButton = PMButton;
 
 const Toolbar = L.Class.extend({
     options: {
-        drawMarker: true,
-        drawPolygon: true,
-        drawPolyline: true,
-        drawCircle: true,
-        drawRectangle: true,
-        editMode: true,
-        cutPolygon: true,
-        dragPolygon: false,
-        removalMode: true,
-        position: 'topleft',
+      drawMarker: true,
+      drawPolygon: true,
+      drawPolyline: true,
+      drawCircle: true,
+      drawRectangle: true,
+      editMode: true,
+      cutPolygon: true,
+      dragPolygon: false,
+      removalMode: true,
+      position: 'topleft',
     },
     initialize(map) {
-        this.map = map;
+      this.map = map;
 
-        this.buttons = {};
-        this.isVisible = false;
-        this.container = L.DomUtil.create('div', 'leaflet-pm-toolbar leaflet-bar leaflet-control');
-        this._defineButtons();
-        this._addKeypressListeners();
-        this._addDrawListeners();
+      this.buttons = {};
+      this.isVisible = false;
+      this.container = L.DomUtil.create('div', 'leaflet-pm-toolbar leaflet-bar leaflet-control');
+      this._defineButtons();
+      this._addDrawListeners();
     },
+
     getButtons() {
-        return this.buttons;
+      return this.buttons;
     },
 
     addControls(options = this.options) {
@@ -244,34 +244,6 @@ const Toolbar = L.Class.extend({
                 buttons[btn].addTo(this.map);
             }
         }
-    },
-
-    _addKeypressListeners() {
-      const map = this.map;
-
-      map.on('keypress', (evt) => {
-        const draw = this.map.pm.Draw;
-
-        console.log(evt);
-
-        switch(evt.originalEvent.key) {
-          case '1':
-            draw.Marker.enable();
-            break;
-          case '2':
-            draw.Line.enable();
-            break;
-          case '3':
-            draw.Rectangle.enable();
-            break;
-          case '4':
-            draw.Poly.enable();
-            break;
-          case '5':
-            draw.Circle.enable();
-            break;
-        }
-      });
     },
 
     _addDrawListeners() {
