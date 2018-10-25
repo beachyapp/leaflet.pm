@@ -130,22 +130,18 @@ const Map = L.Class.extend({
       const map = this.map;
 
       map.on('pm:create', (e) => {
-        map.pm.selectedLayer = e.layer;
+        e.layer._shape = e.shape;
 
         // Add click handler on each layer as created
         e.layer.on('click', (evt) => {
-          map.pm.selectedLayer = evt.layer;
-
           map.fire('pm:layerclick', {
-            shape: evt.shape,
-            layer: evt.layer,
+            layer: evt.target,
           });
         });
       });
     },
 
     toggleGlobalEditMode(options) {
-        // console.log('toggle global edit mode', options);
         if (this.globalEditEnabled()) {
             // disable
             this.disableGlobalEditMode();
