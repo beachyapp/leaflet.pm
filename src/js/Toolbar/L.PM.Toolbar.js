@@ -151,7 +151,7 @@ const Toolbar = L.Class.extend({
             onClick: () => {},
             afterClick: () => {
                 // toggle drawing mode
-                this.map.pm.Draw.Marker.toggle();
+                this.map.pm.Draw.Marker.toggle(null, this.options.markerStyle || {});
             },
             doToggle: true,
             toggleStatus: false,
