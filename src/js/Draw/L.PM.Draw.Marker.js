@@ -22,7 +22,8 @@ Draw.Marker = Draw.extend({
       this._map.pm.Toolbar.toggleButton(this.toolbarButtonName, true);
 
       // this is the hintmarker on the mouse cursor
-      this._hintMarker = L.shapeMarker([0, 0], markerStyle);
+      const icon = new L.DivIcon(this.markerStyle);
+      this._hintMarker = new L.Marker([0, 0], { icon: icon });
       this._hintMarker._pmTempLayer = true;
       this._hintMarker.addTo(this._map);
 
@@ -31,12 +32,6 @@ Draw.Marker = Draw.extend({
 
       // sync hint marker with mouse cursor
       this._map.on('mousemove', this._syncHintMarker, this);
-
-      this._setMarkerRadius(this._hintMarker);
-
-      this._map.on('zoomend', e => {
-        this._setMarkerRadius(this._hintMarker);
-      });
 
       // fire drawstart event
       this._map.fire('pm:drawstart', { shape: this._shape, workingLayer: this._layer });
@@ -104,16 +99,15 @@ Draw.Marker = Draw.extend({
         const latlng = this._hintMarker.getLatLng();
 
         // create marker
-        const marker = new L.shapeMarker(latlng, this.markerStyle);
+        const icon = new L.DivIcon(this.markerStyle);
+        const marker = new L.Marker(latlng, { icon: icon });
 
         // add marker to the map
         marker.addTo(this._map);
 
         // enable editing for the marker
-        marker.pm = new L.PM.Edit.Marker(marker);
-        // marker.pm.enable();
-
-        this._setMarkerRadius(marker);
+        // marker.pm = new L.PM.Edit.Marker(marker);
+        marker.pm.enable();
 
         // fire the pm:create event and pass shape and marker
         this._map.fire('pm:create', {
@@ -134,11 +128,5 @@ Draw.Marker = Draw.extend({
             fakeDragEvent.target = this._hintMarker;
             this._handleSnapping(fakeDragEvent);
         }
-    },
-    _setMarkerRadius(marker) {
-      console.log(marker, this._map.markerSize);
-      if (this._map.markerSize) {
-        marker.setRadius(this._map.markerSize);
-      }
     },
 });

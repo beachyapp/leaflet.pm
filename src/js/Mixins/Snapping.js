@@ -33,6 +33,14 @@ const SnapMixin = {
         // delete the last snap
         delete this._snapLatLng;
     },
+    _handleGridSnapping(evt) {
+      delete this._snapList;
+      this._cleanupGridSnapping();
+      this._handleSnapping(evt);
+    },
+    _cleanupGridSnapping() {
+      this._map.off('pm:gridrender', this._handleGridSnapping, this);
+    },
     _cleanupSnapping() {
         // delete it, we need to refresh this with each start of a drag because
         // meanwhile, new layers could've been added to the map
@@ -40,11 +48,12 @@ const SnapMixin = {
 
         // remove map event
         this._map.off('pm:remove', this._handleSnapLayerRemoval, this);
+        this._cleanupGridSnapping();
 
         if (this.debugIndicatorLines) {
-            this.debugIndicatorLines.forEach((line) => {
-                line.remove();
-            });
+          this.debugIndicatorLines.forEach((line) => {
+            line.remove();
+          });
         }
     },
     _handleSnapLayerRemoval({ layer }) {
@@ -55,8 +64,8 @@ const SnapMixin = {
     },
     _handleSnapping(e) {
         // if snapping is disabled via holding ALT during drag, stop right here
-        if (e.originalEvent.altKey) {
-            return false;
+        if (!e.originalEvent || e.originalEvent.altKey) {
+          return false;
         }
 
         // create a list of polygons that the marker could snap to
@@ -131,6 +140,8 @@ const SnapMixin = {
             eventInfo.marker.fire('pm:unsnap', eventInfo);
             this._layer.fire('pm:unsnap', eventInfo);
         }
+
+        this._map.on('pm:gridrender', this._handleGridSnapping, this);
 
         return true;
     },

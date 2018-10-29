@@ -1,4 +1,7 @@
 import Edit from './L.PM.Edit';
+import SnapMixin from '../Mixins/Snapping';
+import DragMixin from '../Mixins/Drag';
+import {MarkerDrag} from '../../../node_modules/leaflet/src/layer/marker/Marker.Drag';
 
 Edit.Marker = Edit.extend({
     initialize(layer) {
@@ -38,7 +41,7 @@ Edit.Marker = Edit.extend({
 
         // enable dragging and removal for the marker
         if (this.options.draggable) {
-            this._layer.dragging.enable();
+          this._layer.dragging.enable();
         }
 
         // enable snapping

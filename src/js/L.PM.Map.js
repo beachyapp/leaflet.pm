@@ -96,9 +96,9 @@ const Map = L.Class.extend({
         // find all layers handles by leaflet.pm
         let layers = [];
         this.map.eachLayer((layer) => {
-            if (layer instanceof L.Polyline || layer instanceof L.Marker || layer instanceof L.Circle) {
-                layers.push(layer);
-            }
+          if (!layer.disableRemove && (layer instanceof L.Polyline || layer instanceof L.Marker || layer instanceof L.Circle)) {
+            layers.push(layer);
+          }
         });
 
         // filter out layers that don't have the leaflet.pm instance
