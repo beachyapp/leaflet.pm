@@ -23,7 +23,8 @@ Draw.Marker = Draw.extend({
 
       // this is the hintmarker on the mouse cursor
       const icon = new L.DivIcon(this.markerStyle);
-      this._hintMarker = new L.Marker([0, 0], { icon: icon });
+      this._hintMarker = new L.Marker([0, 0], { icon });
+      this._hintMarker._icon = icon;
       this._hintMarker._pmTempLayer = true;
       this._hintMarker.addTo(this._map);
 
@@ -100,7 +101,8 @@ Draw.Marker = Draw.extend({
 
         // create marker
         const icon = new L.DivIcon(this.markerStyle);
-        const marker = new L.Marker(latlng, { icon: icon });
+        const marker = new L.Marker(latlng, { icon });
+        marker._icon = icon;
 
         // add marker to the map
         marker.addTo(this._map);
